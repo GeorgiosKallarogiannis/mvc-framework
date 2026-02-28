@@ -1,0 +1,41 @@
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 9000:80
+    env_file:
+      - ./.env
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=db
+volumes:
+  db-data:
