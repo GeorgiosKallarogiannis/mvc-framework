@@ -9,7 +9,7 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./src
+          path: ./
           target: /var/www/html
     depends_on:
       db:

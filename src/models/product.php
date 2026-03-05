@@ -1,8 +1,8 @@
 <?php
 
-class Model
+class Product
 {
-    public function getData():array
+    public function getData(): array
     {
         $dsn = "mysql:host=db;dbname=product_db;port=3306;charset=utf8mb4;";
 
